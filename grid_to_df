@@ -1,0 +1,23 @@
+import requests, json, pprint
+import pandas as pd
+
+
+def single_field_result(api_call_headers,study_id,participant,field_id):
+    URL=("https://data.castoredc.com/api/study/"+study_id+"/participant/"+participant+"/study-data-point/"+field_id)
+    print(URL)
+    print(api_call_headers)
+    x=requests.get(URL,headers=api_call_headers)
+    x=json.loads(x.text)
+    pprint.pprint(x)
+    return(x)
+
+api_call_headers = {'Authorization': 'Bearer YOUR TOKEN'}
+study_id='YOUR STUDY ID'
+
+response = single_field_result(api_call_headers,study_id,'RECORD ID','FIELD ID')
+value_str = response['value']
+print(value_str)
+value_dict = json.loads(value_str)
+df = pd.DataFrame(value_dict)
+df = df.transpose()
+print(df)
